@@ -4,6 +4,7 @@ import time
 import sys
 sys.path.append('''C:/Users/UVYGBK4/Documents/python/Asteroids/''')
 import pygame_starter_pack as psp
+import math
 
 dt = 1
 
@@ -19,15 +20,19 @@ class Bunny:
         self.id_num = id_num
         self.x = x
         self.y = y
+        self.vx = 0
+        self.vy = 0
         self.reprod_urge = reprod_urge #0 and 100
         self.hotness = hotness #between 0 and 100
         self.male = male
 
         self.color = self.get_bunny_color()
-        self.hop_cooldown = 10
+        self.hop_cooldown = 30
         self.time_til_hop = 0
+        self.hopping = False
         self.hop_time_remaining = 0
-        self.hop_speed = speed
+        self.hop_duration = 10
+        self.speed = speed
         self.sight = sight
 
 
@@ -63,14 +68,37 @@ class Bunny:
 
     def hop(self):
         self.x = (self.x + self.vx * dt)
-        self.y = (self.x + self.vy * dt)
+        self.y = (self.y + self.vy * dt)
+        self.hop_time_remaining = self.hop_time_remaining - dt
 
     def move(self):
 
-        if self.time_til_hop <= 0:
-            self.time_til_hop = self.hop_cooldown
+        if self.time_til_hop <= 0 and not self.hopping:
+            self.hopping = True
+            self.hop_time_remaining = self.hop_duration
 
-        pass
+        if self.hopping:
+            if self.hop_time_remaining == self.hop_duration:
+                #just started the hop
+                self.get_hop_dir()
+
+            if self.hop_time_remaining <= 0:
+                self.hopping = False
+                self.time_til_hop = self.hop_cooldown
+                self.vx = 0
+                self.vy = 0
+
+            else:
+                self.hop()
+
+        else:
+            self.time_til_hop -= dt
+
+
+    def get_hop_dir(self):
+        angle = random_angle()
+        self.vx = self.speed * math.cos(angle)
+        self.vy = self.speed * math.sin(angle)
 
 class Food:
 
@@ -105,6 +133,8 @@ def delete_these_inds(list, inds):
             del list[i]
     return list
 
+def random_angle():
+    return random.random() * math.pi * 2
 
 
 
