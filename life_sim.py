@@ -2,7 +2,7 @@ import pygame
 import random
 import time
 import sys
-sys.path.append('''C:/Users/UVYGBK4/Documents/python/Asteroids/''')
+sys.path.append('''C:/Users/james/Dropbox/Python/pygame/Asteroids/''')
 import pygame_starter_pack as psp
 import math
 
@@ -431,7 +431,7 @@ while running:
         if keys[pygame.K_z]:
             running = False
             pygame.quit()
-            
+
 import matplotlib.pyplot as plt
 
 print (bunnies_num)
